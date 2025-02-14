@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to SSEV's Softsols World</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            position: relative;
+            background: transparent;
+        }
+
+        video.background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: brightness(35%);
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+            opacity: 0;
+            animation: fadeInHeader 0.5s ease-in-out 2s forwards;
+        }
+
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-left a, .nav-right a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .nav-left a:hover, .nav-right a:hover {
+            color: #f0a500;
+        }
+
+        .parallax-container {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .company-logo {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-40%, -50%) scale(3);
+            width: 150px;
+            height: auto;
+            opacity: 0;
+            animation: logoMove 2s ease-in-out forwards;
+            z-index: 2;
+            cursor: pointer;
+        }
+
+        .welcome-text {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            animation: fadeInText 2s ease-in-out 2.5s forwards;
+            z-index: 1;
+        }
+
+        .horizontal-line {
+            position: absolute;
+            top: 47%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background-color: white;
+            opacity: 0;
+            animation: fadeInLine 2s ease-in-out 2.5s forwards;
+            z-index: 1;
+        }
+
+        .ai-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            animation: fadeInText 2s ease-in-out 2.5s forwards;
+            z-index: 1;
+        }
+
+        .content-boxes {
+    position: relative; /* Keeps it aligned with the flow of the page */
+    margin: 350px auto 0; /* Proper space below the welcome text */
+    display: flex;
+    flex-wrap: wrap; /* Ensures boxes wrap on smaller screens */
+    justify-content: center; /* Centers the boxes horizontally */
+    gap: 25px;
+    z-index: 2;
+    opacity: 0; /* Keeps hidden initially for animation */
+    animation: slideInBoxes 1s ease-in-out 3s forwards; /* Delays animation */
+    width: 90%; /* Adjusts width to be responsive */
+    max-width: 1200px; /* Prevents stretching on large screens */
+}
+
+.content-box {
+    position: relative; /* Ensures internal elements like text align properly */
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    flex: 1 1 calc(25% - 20px); /* Dynamically adjusts box width */
+    max-width: 300px; /* Caps width for consistency */
+    height: auto; /* Allows height to adapt */
+    aspect-ratio: 1; /* Maintains square shape */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, filter 0.3s ease; /* Smooth hover effects */
+}
+
+.content-box:hover {
+    transform: scale(1.05); /* Slight enlargement on hover */
+}
+
+.content-box img {
+    width: 100%; /* Ensures image fills the box */
+    height: 100%; /* Ensures consistent aspect ratio */
+    object-fit: cover; /* Keeps image proportionate */
+    filter: brightness(70%);
+    transition: filter 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.content-box img:hover {
+    filter: brightness(100%); /* Brighter on hover */
+}
+
+.content-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centers text */
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    z-index: 2;
+    text-decoration: underline;
+    transition: all 0.3s ease;
+}
+
+.content-box:hover .content-text {
+    top: 10%; /* Moves slightly upward on hover */
+}
+
+.hover-text {
+    position: absolute;
+    top: 100%; /* Starts off-screen */
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centers text */
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    opacity: 0; /* Hidden initially */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+.content-box:hover .hover-text {
+    top: 70%; /* Moves up into view on hover */
+    opacity: 1; /* Becomes visible */
+}
+
+
+        section {
+            width: 100%;
+            height: 30vh;
+            padding: 50px;
+            background: rgba(65, 63, 63, 0.10);
+            border-radius: 0;
+            box-shadow: none;
+            text-align: center;
+            font-size: 1.5rem;
+            color: white;
+            line-height: 2;
+            z-index: 1;
+            position: relative;
+            opacity: 0;
+            transition: opacity 1s ease, transform 1s ease;
+            transform: translateY(50px);
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        section.hidden {
+            opacity: 1; 
+            transform: translateY(50px);
+        }
+
+        /* Ensure Careers and Contact Us Sections have enough spacing */
+#careers, #contact-us {
+    min-height: 80vh; /* Make them take the full screen */
+    padding: 100px 20px; /* Adjust padding */
+    margin-top: 30px; /* Ensure space between sections */
+}
+
+#careers {
+    background: rgba(255, 255, 255, 0.1); /* Light background */
+    padding-bottom: 150px; /* Add bottom padding to prevent overlap */
+}
+
+#contact-us {
+    background: rgba(0, 0, 0, 0.7); /* Different background for contrast */
+    padding-bottom: 100px; /* More bottom padding */
+}
+       /* Positioning slideshow container */
+
+/* ✅ Ensure #gallery section is properly positioned */
+#gallery {
+    position: relative; /* Needed to ensure child elements are positioned correctly */
+    width: 100%;
+    min-height: 60vh; /* Ensures it takes full height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 50px 20px;
+    background: rgba(65, 63, 63, 0.10); /* Background effect */
+}
+
+/* ✅ Centering the gallery content box */
+.gallery-content-box {
+    position: absolute; /* Stays inside #gallery */
+    top: 50%; /* Centers vertically */
+    left: 50%; /* Centers horizontally */
+    transform: translate(-50%, -50%); /* Ensures perfect centering */
+    
+    width: 70%; /* Prevents excessive width */
+    max-width: 900px; /* Keeps consistency */
+    padding: 40px;
+    
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    font-size: 1.2rem;
+    color: #333;
+    
+    opacity: 0;
+    transition: opacity 1s ease-out, transform 1s ease-out;
+    z-index: 2;
+}
+
+/* ✅ Ensures the box fades in & moves into the correct position */
+.gallery-content-box.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+}
+
+/* ❌ REMOVE `display: none;` - It was preventing animation */
+.gallery-content-box.hidden {
+    opacity: 0;
+    transform: translate(-50%, -50%);
+}
+.about-content-box:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.5);
+}
+
+
+
+        
+        @keyframes logoMove {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(3);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.5);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -300%) scale(1);
+            }
+        }
+
+        @keyframes fadeInText {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInLine {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInHeader {
+            from {
+                opacity: 0;
+                transform: translateY(-50%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInBoxes {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Intersection Observer for sections
+            const sections = document.querySelectorAll('section');
+    
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        entry.target.classList.remove('hidden');
+                    } else {
+                        entry.target.classList.remove('visible');
+                        entry.target.classList.add('hidden');
+                    }
+                });
+            }, { threshold: 0.1 });
+    
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+    
+            // Reload page and scroll to the top on logo click
+            const logo = document.querySelector('.company-logo');
+            if (logo) {
+                logo.addEventListener('click', () => {
+                    window.location.reload(); // Reloads the page
+                });
+            }
+    
+            // Smooth scroll to the top of the page when "Home" is clicked
+            const homeButton = document.querySelector('.nav-left a[href="#"]');
+            if (homeButton) {
+                homeButton.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent default anchor behavior
+                    document.documentElement.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+    
+            // Redirect content boxes to new webpages
+            const contentBoxes = document.querySelectorAll('.content-box');
+            contentBoxes.forEach((box, index) => {
+                box.addEventListener('click', () => {
+                    const urls = [
+                        'god.html',    // URL for G.O.D
+                        'iams.html',   // URL for I.A.M.S
+                        'tai.html',    // URL for T.A.I
+                        'trtms.html'   // URL for T.R.T.M.S
+                    ];
+                    // Navigate to the corresponding page based on the index
+                    if (urls[index]) {
+                        window.location.href = urls[index];
+                    }
+                });
+            });
+    
+            // Ensure the page always starts at the top after reload
+            window.addEventListener('load', () => {
+                document.documentElement.scrollTo({
+                    top: 0,
+                    behavior: 'instant' // Instantly moves to the top
+                });
+            });
+        });
+    </script>
+    
+</head>
+<body>
+    <video class="background-video" autoplay muted loop>
+        <source src="brain-interface.960x540.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <header>
+        <div class="nav-left">
+            <a href="#home">Home</a>
+            <a href="#" onclick="document.querySelector('.parallax-container').scrollIntoView({behavior: 'smooth'})">Our Products</a>
+            <a href="#gallery">Gallery</a>
+        </div>
+        <div class="nav-right">
+            <a href="#about-us">About Us</a>
+            <a href="#careers">Careers</a>
+            <a href="#contact-us">Contact Us</a>
+        </div>
+    </header>
+
+    <div class="parallax-container">
+        <img class="company-logo" src="SSEVSOFTSOLS logo.png" alt="SSEV Softsols Logo">
+        <div class="welcome-text">Welcome to SSEV's Softsols World</div>
+        <div class="horizontal-line"></div>
+        <div class="ai-text">Responsibility through AI</div>
+
+        <div class="content-boxes">
+            <div class="content-box">
+                <img src="./man-wearing-vr-headset-interacting-with-virtual-reality_14117-915303.avif" alt="G.O.D">
+                <div class="content-text">G.O.D</div>
+                <div class="hover-text">AI technologies to aid sense disabled persons and virtual reality</div>
+            </div>
+            <div class="content-box">
+                <img src="./HD-wallpaper-erp.jpg" alt="I.A.M.S">
+                <div class="content-text">I.A.M.S</div>
+                <div class="hover-text">Integrated Asset Management solution for Plants, Projects, and Infra</div>
+            </div>
+            <div class="content-box">
+                <img src="./agricultural-robots-work-smart-farms_35913-3364.avif" alt="T.A.I">
+                <div class="content-text">T.A.I</div>
+                <div class="hover-text">Techno Agricultural Innovation: AI-based farm solutions</div>
+            </div>
+            <div class="content-box">
+                <img src="./1728815629175.jpeg" alt="T.R.T.M.S">
+                <div class="content-text">T.R.T.M.S</div>
+                <div class="hover-text">Traffic Management for Eco and Safe Traffic Flow</div>
+            </div>
+        </div>
+    </div>
+    <section id="gallery">
+        <h2 style="text-align: center; margin-bottom: 20px;">Gallery</h2>
+        <p style="text-align: center; margin-bottom: 40px;">Explore our collection of memories and achievements.</p>
+        
+        <div class="slideshow-container">
+            <div class="content-box">
+                <!-- Slideshow Image -->
+                <img id="slideshow" src="./man-wearing-vr-headset-interacting-with-virtual-reality_14117-915303.avif" alt="Slideshow">
+                
+                <!-- Navigation Buttons -->
+                <button id="prev">&#9664;</button>
+                <button id="next">&#9654;</button>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // List of image URLs for the slideshow
+            const images = [
+                './man-wearing-vr-headset-interacting-with-virtual-reality_14117-915303.avif',
+                './HD-wallpaper-erp.jpg',
+                './agricultural-robots-work-smart-farms_35913-3364.avif',
+                './1728815629175.jpeg'
+            ];
+    
+            let currentIndex = 0; // Track the current image index
+            const imgElement = document.getElementById('slideshow');
+    
+            // Function to update the slideshow image
+            function updateImage() {
+                imgElement.src = images[currentIndex];
+            }
+    
+            // Show next image
+            function nextImage() {
+                currentIndex = (currentIndex + 1) % images.length; // Move to the next image
+                updateImage();
+            }
+    
+            // Show previous image
+            function prevImage() {
+                currentIndex = (currentIndex - 1 + images.length) % images.length; // Move to the previous image
+                updateImage();
+            }
+    
+            // Event listeners for navigation arrows
+            document.getElementById('next').addEventListener('click', nextImage);
+            document.getElementById('prev').addEventListener('click', prevImage);
+    
+            // Auto-change slides every 3 seconds
+            setInterval(nextImage, 3000);
+    
+            // Ensure the content box does nothing on click
+            const contentBox = document.querySelector('.content-box');
+            contentBox.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent any default action
+                e.stopPropagation(); // Stop event propagation
+            });
+        });
+    </script>
+    
+    
+    
+    <section id="about-us" style="padding: 60px 20px; background-color: transparent; margin-bottom: 450px;">
+        <h2 style="text-align: center; margin-bottom: 20px;">About Us</h2>
+        <p style="text-align: center; margin-bottom: 40px;">Learn more about SSEV Softsols and our mission to innovate through technology.</p>
+    
+        <!-- Transparent Text Box with Highlighted White Text -->
+        <section id="about-us" 
+        style="
+            padding: 50px 20px; 
+            background-color: transparent;
+            height: 80vh; /* Adjust height */
+            margin-bottom: 200px;"
+                background-color: rgba(255, 255, 255, 0.1); /* Transparent effect */
+                border: 1px solid rgba(255, 255, 255, 0.3); /* Soft border */
+                border-radius: 10px;
+                text-align: justify;
+                font-size: 1rem;
+                color: white;
+                line-height: 1.6;
+                box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+                backdrop-filter: blur(10px);
+                transition: background 0.3s ease-in-out, box-shadow 0.3s ease-in-out;">
+            
+            <p>
+                <strong>M/s. SSEV SOFTWARE SOLUTIONS PRIVATE LIMITED</strong> is a subsidiary of SSEV Group with the concept of exploring the "Nature's Power” to provide cutting-edge technologies and AI interpretation. 
+                The primary objective is to create a niche in the Technology, Software, and Artificial Intelligence Sectors. 
+                The company has done research on one of the most burning and painful issues of “Traffic problems” across the world and developed some of the BEST solutions for Eco and safe traffic flows. Now the company has developed AI-based, most intelligent Integrated Traffic Management solutions. 
+                The Company is working on AI-based Integrated Asset Management solutions for providing real-time and enhanced plant life solutions for projects, plants, and infrastructure facilities. 
+                The company is making its contribution to improving farmers' revenue and growth by providing AI-based technology solutions in the farming sector. 
+                The company is managed by personnel with vast experience and young treks.
+            </p>
+        </div>
+    
+ <!-- Container to align both buttons -->
+<div style="
+display: flex; 
+justify-content: center; 
+gap: 30px; /* Adds space between buttons */
+margin-top: 20px;
+">
+
+<!-- Click to Know More Box -->
+<div class="about-content-box" 
+    style="
+        padding: 10px 20px; 
+        border-radius: 5px; 
+        background-color: white; /* Set background to white */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); 
+        width: 280px; 
+        height: 50px; 
+        display: flex; /* Ensures text is centered */
+        align-items: center; /* Centers vertically */
+        justify-content: center; /* Centers horizontally */
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    "
+    onclick="window.location.href='https://www.ssev.in/'">
+    <a href="https://www.ssev.in/" target="_blank" 
+        style="
+            text-decoration: none; 
+            font-size: 1rem; 
+            color: black; /* Text color to black */
+            font-weight: bold;
+        ">
+        Click to Know More
+    </a>
+</div>
+
+<!-- Meet Our Team Box -->
+<div class="about-content-box" 
+    style="
+        padding: 10px 20px; 
+        border-radius: 5px; 
+        background-color: white; /* Set background to white */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); 
+        width: 280px; 
+        height: 50px; 
+        display: flex; /* Ensures text is centered */
+        align-items: center; /* Centers vertically */
+        justify-content: center; /* Centers horizontally */
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    "
+    onclick="window.location.href='aboutus.html'">
+    <a href="aboutus.html" target="_blank" 
+        style="
+            text-decoration: none; 
+            font-size: 1rem; 
+            color: black; /* Text color to black */
+            font-weight: bold;
+        ">
+        Meet Our Team
+    </a>
+</div>
+
+</div>
+</section>
+     
+    <section id="careers" style="padding: 50px 20px; background-color: transparent;">
+        <h2 style="text-align: center; margin-bottom: 40px;">Careers</h2>
+        <p style="text-align: center; margin-bottom: 40px;">Join our team and be a part of our journey to create cutting-edge solutions.</p>
+    
+        <div style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-top: 40px;">
+            
+            <!-- Technical Jobs Box -->
+            <a href="https://example.com/technical-jobs" target="_blank" style="
+                text-decoration: none;">
+                <div style="
+                    width: 350px;
+                    height: 200px;
+                    background-color: rgba(255, 255, 255, 0.1);
+                    border-radius: 10px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: space-between;
+                    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+                    text-align: center;
+                    cursor: pointer;
+                    overflow: hidden;">
+                    
+                    <!-- Placeholder Image -->
+                    <img src="https://via.placeholder.com/350x150" alt="Technical Jobs" 
+                        style="
+                            width: 100%;
+                            height: 70%;
+                            object-fit: cover;">
+                    
+                    <!-- Text -->
+                    <span style="
+                        font-size: 1.5rem;
+                        color: white;
+                        font-weight: bold;
+                        margin-bottom: 10px;">
+                        Technical Jobs
+                    </span>
+                </div>
+            </a>
+            
+            <!-- Non-Technical Jobs Box -->
+            <a href="https://example.com/non-technical-jobs" target="_blank" style="
+                text-decoration: none;">
+                <div style="
+                    width: 350px;
+                    height: 200px;
+                    background-color: rgba(255, 255, 255, 0.1);
+                    border-radius: 10px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: space-between;
+                    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+                    text-align: center;
+                    cursor: pointer;
+                    overflow: hidden;">
+                    
+                    <!-- Placeholder Image -->
+                    <img src="https://via.placeholder.com/350x150" alt="Non-Technical Jobs" 
+                        style="
+                            width: 100%;
+                            height: 70%;
+                            object-fit: cover;">
+                    
+                    <!-- Text -->
+                    <span style="
+                        font-size: 1.5rem;
+                        color: white;
+                        font-weight: bold;
+                        margin-bottom: 10px;">
+                        Non-Technical Jobs
+                    </span>
+                </div>
+            </a>
+        </div>
+    
+        <!-- Disclaimer Section -->
+        <div style="
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;">
+            
+            <!-- Disclaimer Icon (Unicode Symbol) -->
+            <span style="
+                font-size: 1.5rem;
+                color: white;">
+                ⚠️
+            </span>
+            
+            <!-- Disclaimer Text -->
+            <span style="
+                font-size: 1rem;
+                color: white;
+                text-align: center;">
+                Sorry! We aren’t hiring right now.
+            </span>
+        </div>
+    </section>
+    
+    
+
+    <section id="contact-us" style="padding: 100px 20px; background-color: transparent;">
+        <h2 style="text-align: center; margin-bottom: 20px;">Contact Us</h2>
+        <p style="text-align: center; margin-bottom: 40px;">Reach out to us for inquiries, partnerships, or support. We'd love to hear from you!</p>
+        
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 20px;">
+            <!-- Google Maps Box -->
+            <div class="maps-box" 
+                style="
+                    width: 400px;
+                    height: 300px;
+                    background-color: rgba(255, 255, 255, 0.1);
+                    border-radius: 10px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                    overflow: hidden;
+                    cursor: pointer;
+                "
+                onclick="window.open('https://maps.app.goo.gl/ejKStBu2caGdmQtf9', '_blank')" 
+                title="View on Google Maps">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3804.8043932744376!2d78.47731757540596!3d17.51684853339258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb9aab90e76c31%3A0x3294a044da20712a!2sVSS%20NANDADEEP-3%2C%20Phase%201%2C%20Dandamudi%20Enclave%2C%20Jeedimetla%2C%20Hyderabad%2C%20Telangana%20500067%2C%20India!5e0!3m2!1sen!2sus!4v1737730076639!5m2!1sen!2sus" 
+                    width="100%"
+                    height="100%"
+                    frameborder="0"
+                    style="border: 0;"
+                    allowfullscreen=""
+                    aria-hidden="false"
+                    tabindex="0">
+                </iframe>
+            </div>
+            
+            <!-- Social Media and Contact Boxes -->
+            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 20px;">
+    
+                <!-- Instagram Box -->
+                <div class="instagram-box" 
+                    style="
+                        width: 300px;
+                        height: 100px;
+                        background-color: rgba(255, 255, 255, 0.1);
+                        border-radius: 10px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-start;
+                        padding: 10px 20px;
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                        cursor: pointer;
+                    "
+                    onclick="window.open('https://www.instagram.com/ssev_soft_sols/?igsh=emI0ZDRoczlldTds#', '_blank')" 
+                    title="Visit our Instagram page">
+                    
+                    <!-- Instagram Logo -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram Logo" 
+                        style="width: 40px; height: 40px; margin-right: 15px;">
+                    
+                    <!-- Instagram Link -->
+                    <span style="
+                        font-size: 1rem; 
+                        color: white; 
+                        font-weight: bold; 
+                        text-decoration: underline;">
+                        Follow us on Instagram
+                    </span>
+                </div>
+    
+                <!-- Twitter (X) Box -->
+                <div class="twitter-box" 
+                    style="
+                        width: 300px;
+                        height: 100px;
+                        background-color: rgba(255, 255, 255, 0.1);
+                        border-radius: 10px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-start;
+                        padding: 10px 20px;
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                        cursor: pointer;
+                    "
+                    onclick="window.open('https://twitter.com/', '_blank')" 
+                    title="Visit our Twitter page">
+                    
+                    <!-- Twitter Logo -->
+                    <img src="https://upload.wikimedia.org/wikipedia/en/6/60/Twitter_Logo_as_of_2021.svg" alt="Twitter Logo" 
+                        style="width: 40px; height: 40px; margin-right: 15px;">
+                    
+                    <!-- Twitter Link -->
+                    <span style="
+                        font-size: 1rem; 
+                        color: white; 
+                        font-weight: bold; 
+                        text-decoration: underline;">
+                        Follow us on X (Twitter)
+                    </span>
+                </div>
+    
+                <!-- Phone Number Box -->
+                <div class="phone-box" 
+                    style="
+                        width: 300px;
+                        height: 100px;
+                        background-color: rgba(255, 255, 255, 0.1);
+                        border-radius: 10px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-start;
+                        padding: 10px 20px;
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                    ">
+                    
+                    <!-- Phone Icon -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Phone_icon.png" alt="Phone Icon" 
+                        style="width: 40px; height: 40px; margin-right: 15px;">
+                    
+                    <!-- Phone Number -->
+                    <span style="
+                        font-size: 1rem; 
+                        color: white; 
+                        font-weight: bold;">
+                        +91 9618112017
+                    </span>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Address Box -->
+        <div style="
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1rem;
+            color: white;
+            text-decoration: underline;
+            background-color: transparent;">
+            112, VSS Nandadeep Apartment, Medchal Road, Dandamudi Enclave, Jeedimetla, Hyderabad, TS 500067, India
+        </div>
+    </section>    
+</body>
+</html>

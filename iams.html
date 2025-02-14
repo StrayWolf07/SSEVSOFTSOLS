@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAMS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            position: relative;
+            background: transparent;
+        }
+
+        video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+            font-family: 'Arial', sans-serif;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-left a, .nav-right a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-left a:hover, .nav-right a:hover {
+            color: #f0a500;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .content h1 {
+            font-size: 48px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .line {
+            width: 50%;
+            height: 2px;
+            background: white;
+            margin: 15px 0;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <!-- Video Background -->
+    <video autoplay muted loop>
+        <source src="183108-870151713_tiny.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Header Bar -->
+    <header>
+        <div class="nav-left">
+            <a href="index1.html">Home</a>
+            <a href="index1.html#products">Our Products</a>
+            <a href="index1.html#about-us">About Us</a>
+        </div>
+        <div class="nav-right">
+            <a href="index1.html#gallery">Gallery</a>
+            <a href="index1.html#careers">Careers</a>
+            <a href="index1.html#contact-us">Contact Us</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="content">
+        <h1>I.A.M.S</h1>
+        <div class="line"></div>
+        <p class="subtitle">Intelligent Automated Management Systems</p>
+    </div>
+</body>
+</html>
